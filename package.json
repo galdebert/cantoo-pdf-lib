@@ -62,7 +62,7 @@
     "build:esm:min": "rollup --config rollup.config.mjs --file dist/pdf-lib.esm.min.js --environment MINIFY,MODULE_TYPE:es",
     "build:umd": "rollup --config rollup.config.mjs --file dist/pdf-lib.js --environment MODULE_TYPE:umd",
     "build:umd:min": "rollup --config rollup.config.mjs --file dist/pdf-lib.min.js --environment MINIFY,MODULE_TYPE:umd",
-    "build:downlevel-dts": "rimraf ts3.4 && yarn downlevel-dts . ts3.4 && rimraf ts3.4/scratchpad",
+    "build:downlevel-dts": "rimraf ts3.4 && downlevel-dts . ts3.4 && rimraf ts3.4/scratchpad",
     "build:test": "yarn build:es && yarn build:umd",
     "scratchpad:start": "tsc --build scratchpad/tsconfig.json --watch",
     "scratchpad:run": "node scratchpad/build/scratchpad/index.js",

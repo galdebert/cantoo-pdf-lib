@@ -5,9 +5,9 @@ const prettier = require('eslint-plugin-prettier');
 const globals = require('globals');
 
 module.exports = [
-  eslint.configs.recommended,
   {
-    files: ['**/*.{ts,tsx,js,jsx,mjs}'],
+    ...eslint.configs.recommended,
+    files: ['src/**/*.{ts,tsx,js,jsx,mjs}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -63,17 +63,15 @@ module.exports = [
     },
   },
   {
-    files: [
-      '**/tests/**/*.{ts,tsx,js,jsx}',
-      '**/*.spec.{ts,tsx,js,jsx}',
-      '**/*.test.{ts,tsx,js,jsx}',
-    ],
+    ...eslint.configs.recommended,
+    files: ['tests/**/*.{ts,tsx,js,jsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
-    files: ['**/apps/rn/**/*.{ts,tsx,js,jsx,mjs}'],
+    ...eslint.configs.recommended,
+    files: ['apps/rn/**/*.{ts,tsx,js,jsx,mjs}'],
     languageOptions: {
       globals: {
         require: 'readonly',
@@ -81,7 +79,8 @@ module.exports = [
     },
   },
   {
-    files: ['**/apps/deno/**/*.{ts,tsx,js,jsx,mjs}'],
+    ...eslint.configs.recommended,
+    files: ['apps/deno/**/*.{ts,tsx,js,jsx,mjs}'],
     languageOptions: {
       globals: {
         Deno: 'readonly',
