@@ -239,7 +239,9 @@ export interface Subset {
    * Returns a stream containing the encoded font file that can be piped to a
    * destination, such as a file.
    */
-  encodeStream(): SubsetStream;
+  encodeStream?(): SubsetStream; // fontkit v1
+
+  encode?(): Uint8Array; // fontkit v2
 }
 
 /**
@@ -635,6 +637,14 @@ export interface Font {
   createSubset(): Subset;
 }
 
+interface FontCollection {
+  type: 'TTC' | 'DFont';
+  getFont(name: string): Font | null;
+  fonts: Font[];
+}
+
 export interface Fontkit {
-  create(buffer: Uint8Array, postscriptName?: string): Font;
+  create:
+    | ((buffer: Uint8Array, postscriptName?: string) => Font) // fontkit v1
+    | ((buffer: Uint8Array, postscriptName?: string) => Font | FontCollection); // fontkit v2
 }

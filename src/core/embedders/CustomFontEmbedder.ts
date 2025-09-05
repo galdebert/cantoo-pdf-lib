@@ -12,6 +12,7 @@ import {
   sortedUniq,
   toHexStringOfMinLength,
 } from '../../utils';
+import { createFont } from './CreateFontFromU8';
 
 /**
  * A note of thanks to the developers of https://github.com/foliojs/pdfkit, as
@@ -25,7 +26,7 @@ class CustomFontEmbedder {
     customName?: string,
     fontFeatures?: TypeFeatures,
   ) {
-    const font = await fontkit.create(fontData);
+    const font = createFont(fontkit, fontData);
     return new CustomFontEmbedder(font, fontData, customName, fontFeatures);
   }
 

@@ -9,6 +9,7 @@ import {
 import CustomFontEmbedder from './CustomFontEmbedder';
 import PDFHexString from '../objects/PDFHexString';
 import { Cache, mergeUint8Arrays, toHexStringOfMinLength } from '../../utils';
+import { createFont } from './CreateFontFromU8';
 
 /**
  * A note of thanks to the developers of https://github.com/foliojs/pdfkit, as
@@ -22,7 +23,7 @@ class CustomFontSubsetEmbedder extends CustomFontEmbedder {
     customFontName?: string,
     fontFeatures?: TypeFeatures,
   ) {
-    const font = await fontkit.create(fontData);
+    const font = createFont(fontkit, fontData);
     return new CustomFontSubsetEmbedder(
       font,
       fontData,
@@ -78,11 +79,17 @@ class CustomFontSubsetEmbedder extends CustomFontEmbedder {
   protected serializeFont(): Promise<Uint8Array> {
     return new Promise((resolve, reject) => {
       const parts: Uint8Array[] = [];
-      this.subset
-        .encodeStream()
-        .on('data', (bytes) => parts.push(bytes))
-        .on('end', () => resolve(mergeUint8Arrays(parts)))
-        .on('error' as any, (err) => reject(err));
+      if (this.subset.encodeStream) {
+        this.subset
+          .encodeStream()
+          .on('data', (bytes) => parts.push(bytes))
+          .on('end', () => resolve(mergeUint8Arrays(parts)))
+          .on('error' as any, (err) => reject(err));
+      } else if (this.subset.encode) {
+        return resolve(this.subset.encode());
+      } else {
+        throw new Error('Font subset has no encode or encodeStream method');
+      }
     });
   }
 }
